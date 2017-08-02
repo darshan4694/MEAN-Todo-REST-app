@@ -1,8 +1,8 @@
-const mongoose =require('mongoose');
+const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
-mongoose.connect('mongodb://localhost:27017/ToDoApp',  { useMongoClient: true });
+mongoose.connect('mongodb://localhost:27017/ToDoApp', { useMongoClient: true });
 
 var Todo = mongoose.model('Todo', {
     text: {
@@ -17,7 +17,7 @@ var Todo = mongoose.model('Todo', {
     },
     completedAt: {
         type: Number,
-        default:null
+        default: null
     }
 });
 
@@ -26,11 +26,11 @@ var todo2 = new Todo({
     // completed: false
 });
 
-todo2.save().then((doc)=>{
-    console.log(JSON.stringify(doc, undefined, 2));
-}, (e)=>{
-    console.log("Unable to save");
-});
+// todo2.save().then((doc)=>{
+//     console.log(JSON.stringify(doc, undefined, 2));
+// }, (e)=>{
+//     console.log("Unable to save");
+// });
 // Output: 
 // {
 //   "__v": 0,
@@ -40,3 +40,22 @@ todo2.save().then((doc)=>{
 //   "completed": false
 // }
 
+
+mongoose.connect('mongodb://localhost:27017/Users', { useMongoClient: true });
+
+var User = mongoose.model('User', {
+    email: {
+        type: String,
+        required: true,
+        trim: true,
+        minlength: 1
+    }
+});
+
+var user1 = new User({ email: 'd' });
+
+user1.save().then((docs) => {
+    console.log(JSON.stringify(docs, undefined, 2));
+}, (e) => {
+    console.log("Unable to save.");
+});
