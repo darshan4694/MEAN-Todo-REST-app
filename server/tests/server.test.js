@@ -1,17 +1,22 @@
 const expect = require('expect');
 const request = require('supertest');
 
+const {ObjectID} = require('mongodb');
+
 const { app } = require('./../server');
 const { Todo } = require('./../models/todo');
 
 var todos = [
     {
+        _id: new ObjectID(),
         text: 'Test data 1'
     },
     {
+        _id: new ObjectID(),
         text: 'Test data 2'
     },
     {
+        _id: new ObjectID(),
         text: 'Test data 3'
     }
 ]
@@ -76,5 +81,36 @@ describe('GET /todos', () => {
                 // done();
             })
             .end(done);
-    })
+    });
+});
+
+describe('GET /todos/:id', () => {
+    it('should return a todos', (done) => {
+        request(app)
+            .get(`/todos/${todos[0]._id.toHexString()}`)
+            .expect(200)
+            .expect((res) => {
+
+                expect(res.body.todo.text).toBe(todos[0].text);
+                // expect(res.body.todos).toBe(todos);
+                // done();
+            })
+            .end(done);
+    });
+
+    it('should return a not vaid todo', (done) => {
+        // var id_tmp = "1223"
+        request(app)
+            .get(`/todos/1223`)
+            .expect(404)
+            .end(done);
+    });
+
+     it('should return a bad todo', (done) => {
+         var newId = new ObjectID().toHexString();
+        request(app)
+            .get(`/todos/${newId}}`)
+            .expect(404)
+            .end(done);
+    });
 });
